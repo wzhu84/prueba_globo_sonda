@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El invernadero</title>
+    <title>Coordenadas en RV</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
 </head>
@@ -14,29 +14,30 @@
             <a-asset-item id="museo2-glb" src="museo2.glb"></a-asset-item>
         </a-assets>
 
-        <!-- Modelo 3D del museo con todos los elementos en su interior -->
+        <!-- Modelo 3D del museo -->
         <a-entity 
             gltf-model="#museo2-glb" 
-            scale="0.1 0.1 0.1" 
+            scale="10 10 10" 
             position="0 0 0" 
-            static-body>
-            
-            <!-- Cámara con controles móviles -->
-            <a-entity id="rig" position="80 50 0">
-                <a-entity 
-                    camera 
-                    look-controls 
-                    wasd-controls="acceleration: 500">
-                </a-entity>
+            static-body></a-entity>
+        
+        <!-- Cámara con controles móviles -->
+        <a-entity id="rig" position="0 5 0">
+            <a-entity 
+                camera 
+                look-controls 
+                wasd-controls="acceleration: 200">
             </a-entity>
-            <!-- Coordenadas en la pantalla -->
-        <a-entity id="coordenadas" position="0 1 -3" text="value: X: 80 Y: 50 Z: 0; color: #FFF; align: center;"></a-entity>
+        </a-entity>
+
+        <!-- Coordenadas en la pantalla -->
+        <a-entity id="coordenadas" position="0 1 -3" text="value: X: 0 Y: 0 Z: 0; color: #FFF; align: center;"></a-entity>
 
         <!-- Script para actualizar las coordenadas -->
         <script>
             AFRAME.registerComponent('show-coordinates', {
                 tick: function () {
-                    const cameraEl = document.querySelector('a-camera'); // Obtener la cámara
+                    const cameraEl = document.querySelector('#rig a-entity[camera]'); // Actualizado para seleccionar correctamente la cámara
                     const position = cameraEl.getAttribute('position'); // Obtener las coordenadas de la cámara
                     
                     // Actualizar las coordenadas en el elemento de texto
@@ -48,45 +49,12 @@
             // Agregar el componente al <a-scene> para actualizar las coordenadas
             document.querySelector('a-scene').setAttribute('show-coordinates', '');
         </script>
-            
-            <!-- Permitir movimiento con orientación del dispositivo -->
-            <a-entity mobile-movement></a-entity>
 
-            <!-- Script para movimiento con orientación del dispositivo -->
-            <script>
-                AFRAME.registerComponent('mobile-movement', {
-                    init: function () {
-                        const el = this.el;
-                        window.addEventListener('deviceorientation', function (event) {
-                            const beta = event.beta; // Inclinación frontal-trasera
-                            const gamma = event.gamma; // Inclinación lateral
-
-                            // Movimiento adelante/atrás
-                            if (beta > 15) {
-                                el.object3D.position.z -= 1;
-                            }
-                            if (beta < -15) {
-                                el.object3D.position.z += 1;
-                            }
-
-                            // Movimiento izquierda/derecha
-                            if (gamma > 10) {
-                                el.object3D.position.x += 1;
-                            }
-                            if (gamma < -10) {
-                                el.object3D.position.x -= 1;
-                            }
-                        });
-                    }
-                });
-            </script>
-        </a-entity>
-
-        <!-- Iluminación mejorada -->
+        <!-- Iluminación -->
         <a-light type="ambient" color="#FFFFFF" intensity="1"></a-light>
-        <a-light type="point" position="0.1 0.1 0.1" intensity="2" color="#FFFFFF"></a-light>
-        <a-light type="point" position="-0.1 0.1 0.1" intensity="2" color="#FFFFFF"></a-light>
-        <a-light type="point" position="0 0.1 0" intensity="0.5" color="#FFFFFF"></a-light>
+        <a-light type="point" position="10 10 10" intensity="2" color="#FFFFFF"></a-light>
+        <a-light type="point" position="-10 10 10" intensity="2" color="#FFFFFF"></a-light>
+        <a-light type="point" position="0 5 0" intensity="1.5" color="#FFFFFF"></a-light>
     </a-scene>
 </body>
 </html>
