@@ -29,6 +29,25 @@
                     wasd-controls="acceleration: 500">
                 </a-entity>
             </a-entity>
+            <!-- Coordenadas en la pantalla -->
+        <a-entity id="coordenadas" position="0 1 -3" text="value: X: 0 Y: 0 Z: 0; color: #FFF; align: center;"></a-entity>
+
+        <!-- Script para actualizar las coordenadas -->
+        <script>
+            AFRAME.registerComponent('show-coordinates', {
+                tick: function () {
+                    const cameraEl = document.querySelector('a-camera'); // Obtener la cámara
+                    const position = cameraEl.getAttribute('position'); // Obtener las coordenadas de la cámara
+                    
+                    // Actualizar las coordenadas en el elemento de texto
+                    const coordenadasEl = document.getElementById('coordenadas');
+                    coordenadasEl.setAttribute('text', 'value: X: ' + position.x.toFixed(2) + ' Y: ' + position.y.toFixed(2) + ' Z: ' + position.z.toFixed(2));
+                }
+            });
+
+            // Agregar el componente al <a-scene> para actualizar las coordenadas
+            document.querySelector('a-scene').setAttribute('show-coordinates', '');
+        </script>
             
             <!-- Permitir movimiento con orientación del dispositivo -->
             <a-entity mobile-movement></a-entity>
